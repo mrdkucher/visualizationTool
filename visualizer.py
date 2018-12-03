@@ -14,7 +14,7 @@ def visualizeTour(pointsFile, tourFiles):
 
 	for i in range(vtxCount):
 		coords = vtxFile.readline()
-		coords = re.findall('\d+', coords)
+		coords = re.findall('-?\d+', coords)
 		vertices[i] = (coords[0], coords[1])
 
 	#create a plot
@@ -43,7 +43,8 @@ def visualizeTour(pointsFile, tourFiles):
 		tourAxes[i] = plt.subplot(len(tourFiles), 1, i)
 		tourAxes[i].plot(vtxX, vtxY, linestyle='-', color='b', markerfacecolor='red', marker='o')
 		tourAxes[i].set_title(tourFiles[i] + " - Weight: " + weight)
-		plt.show()
+
+	plt.show()
 	return
 
 def visualizeTree(pointsFile, edgesFile):
@@ -57,7 +58,7 @@ def visualizeTree(pointsFile, edgesFile):
 	#print(vertices)
 	for i in range(vtxCount):
 		coords = vtxFile.readline()
-		coords = re.findall('\d+', coords)
+		coords = re.findall('-?\d+', coords)
 		vertices[i] = (coords[0], coords[1])
 	
 	#read in edges
