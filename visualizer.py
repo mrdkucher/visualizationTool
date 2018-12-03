@@ -11,7 +11,7 @@ def visualizeTour(pointsFile, tourFiles):
 
 	#create array of vertices
 	vertices = np.zeros(vtxCount, dtype='i,i').tolist()
-	#print(vertices)
+
 	for i in range(vtxCount):
 		coords = vtxFile.readline()
 		coords = re.findall('\d+', coords)
