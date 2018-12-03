@@ -34,3 +34,6 @@ With V - 1 edges of format:
 V1 V2
 ```
 
+### Example Usage
+python visualizer.py MST vertices.txt mst.out
+python visualizer.py TSP vertices.txt tsp1.out tsp2.out tsp3.out
