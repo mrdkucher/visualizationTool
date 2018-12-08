@@ -1,6 +1,6 @@
 # Graph Traversal Visualizer
 
-This is a visualization tool that uses Python 3 to print out various tours of vertices in a graph.
+This is a visualization tool that uses Python(2.7.10) to print out various tours of vertices in a graph.
 
 ```
 Usage: python visualizer.py [MST|TSP] [vertices file name] [[mst file name] | [tour 1 file name] [tour 2 file name] ... [tour n file name]]
