@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import re
 import sys
-import math
 
 def visualizeTour(pointsFile, tourFiles):
 	#read in points
@@ -19,40 +18,31 @@ def visualizeTour(pointsFile, tourFiles):
 		vertices[i] = (coords[0], coords[1])
 
 	#create a plot
-	#tourAxes = np.empty(len(tourFiles), dtype=object)
-	tourAxes = np.ndarray(shape=(math.ceil(math.log(len(tourFiles), 2)), math.ceil(math.log(len(tourFiles), 2))), dtype=object)
-	fig, tourAxes = plt.subplots(int(math.ceil(math.log(len(tourFiles), 2))), int(math.ceil(math.log(len(tourFiles), 2))))
+	tourAxes = np.empty(len(tourFiles), dtype=object)
 
-	tours = np.ndarray(shape=(math.ceil(math.log(len(tourFiles), 2)), math.ceil(math.log(len(tourFiles), 2)), vtxCount), dtype='i')
-	sortedVertices = np.ndarray(shape=(math.ceil(math.log(len(tourFiles), 2)), math.ceil(math.log(len(tourFiles), 2)), vtxCount + 1), dtype ='i,i')
+	tours = np.ndarray(shape=(len(tourFiles), vtxCount), dtype='i')
+	sortedVertices = np.ndarray(shape=(len(tourFiles), vtxCount + 1), dtype ='i,i')
 	
 	#read in tours and create plots
-	k = 0;
-	for i in range(int(math.ceil(math.log(len(tourFiles), 2)))):
-		for j in range(int(math.ceil(math.log(len(tourFiles), 2)))):
-			if(k < len(tourFiles)):
-				tourFile = open(tourFiles[k])
-				weight = tourFile.readline()
-				vtx = re.findall('\d+', tourFile.readline())
-				
-				#create a copy of the vertices in the order of the tour
-				for v in range(vtxCount):
-					tours[i, j, v] = vtx[v]
-					sortedVertices[i, j, v] = vertices[tours[i, j, v]]
+	for i in range(len(tourFiles)):
+		tourFile = open(tourFiles[i])
+		weight = tourFile.readline()
+		vtx = re.findall('\d+', tourFile.readline())
+			
+		#create a copy of the vertices in the order of the tour
+		for v in range(vtxCount):
+			tours[i, v] = vtx[v]
+			sortedVertices[i, v] = vertices[tours[i, v]]
 		
-				#include a return to the first vertex of the tour
-				sortedVertices[i, j, vtxCount] = vertices[0]
-				
-				#get the tour in a format that can be plotted
-				vtxX, vtxY = np.array(sortedVertices[i, j].tolist()).T
-				
-				#tourAxes[i][j] = plt.subplot(len(tourFiles), i + 1, j + 1)
-				tourAxes[i][j].plot(vtxX, vtxY, linestyle='-', color='b', markerfacecolor='red', marker='o')
-				tourAxes[i][j].set_title(tourFiles[k] + " - Weight: " + weight)
-				k = k + 1
-			else:
-				i = len(tourFiles)
-				j = len(tourFiles)
+		#include a return to the first vertex of the tour
+		sortedVertices[i, vtxCount] = vertices[0]
+		
+		#get the tour in a format that can be plotted
+		vtxX, vtxY = np.array(sortedVertices[i].tolist()).T
+		
+		tourAxes[i] = plt.subplot(len(tourFiles), 1, i)
+		tourAxes[i].plot(vtxX, vtxY, linestyle='-', color='b', markerfacecolor='red', marker='o')
+		tourAxes[i].set_title(tourFiles[i] + " - Weight: " + weight)
 
 	plt.show()
 	return
@@ -94,10 +84,7 @@ if(len(sys.argv) < 4):
 
 vFile = sys.argv[2]
 tFiles = sys.argv[3:]
-#fileMat = np.ndarray(math.ceil(math.log(len(tFiles), 2)), math.ceil(math.log(len(tFiles), 2)), dtype='s')
-#k
-#for i in range(int(math.ceil(math.log(len(tourFiles), 2)))):
-#	for j in range(int(math.ceil(math.log(len(tourFiles), 2)))):
+
 if(sys.argv[1] == "MST"):
 	visualizeTree(vFile, tFiles[0])
 else:
