@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import re
 import sys
+import math
 
 def visualizeTour(pointsFile, tourFiles):
 	#read in points
@@ -17,16 +18,13 @@ def visualizeTour(pointsFile, tourFiles):
 		coords = re.findall('-?\d+', coords)
 		vertices[i] = (coords[0], coords[1])
 
-<<<<<<< HEAD
-	#create a plot: set plotDim to be a greater number than the number of files in tourFiles
-	plotDimX = int(math.ceil(math.log(len(tourFiles), 2)))
-	plotDimY = plotDimX if plotDimX > 0 else 1
-	
-	while(plotDimX * plotDimY < len(tourFiles)):
-		plotDimX = plotDimX + 1
+	#create a plot: set plotDimX to be max width, and increment plotDimY as needed
+	plotDimX = int(math.ceil(math.log(len(tourFiles), 2))) or 1
+	plotDimY = 1
+	while(plotDimY * plotDimX < len(tourFiles)):
+		plotDimY = plotDimY + 1
 
 	tourAxes = np.ndarray(shape=(plotDimY, plotDimX), dtype=object)
-	#fig, tourAxes = plt.subplots(plotDimY, plotDimX)
 	
 	tours = np.ndarray(shape=(plotDimY, plotDimX, vtxCount), dtype='i')
 	sortedVertices = np.ndarray(shape=(plotDimY, plotDimX, vtxCount + 1), dtype ='i,i')
@@ -51,42 +49,14 @@ def visualizeTour(pointsFile, tourFiles):
 				#get the tour in a format that can be plotted
 				vtxX, vtxY = np.array(sortedVertices[i, j].tolist()).T
 				
-				tourAxes[i][j] = plt.subplot(plotDimY, plotDimX, k)
+				tourAxes[i][j] = plt.subplot(plotDimY, plotDimX, k + 1)
 				tourAxes[i][j].plot(vtxX, vtxY, linestyle='-', color='b', markerfacecolor='red', marker='o')
 				tourAxes[i][j].set_title(tourFiles[k] + " - Weight: " + weight)
 				k = k + 1
 			else:
 				i = len(tourFiles)
 				j = len(tourFiles)
-=======
-	#create a plot
-	tourAxes = np.empty(len(tourFiles), dtype=object)
-
-	tours = np.ndarray(shape=(len(tourFiles), vtxCount), dtype='i')
-	sortedVertices = np.ndarray(shape=(len(tourFiles), vtxCount + 1), dtype ='i,i')
 	
-	#read in tours and create plots
-	for i in range(len(tourFiles)):
-		tourFile = open(tourFiles[i])
-		weight = tourFile.readline()
-		vtx = re.findall('\d+', tourFile.readline())
-			
-		#create a copy of the vertices in the order of the tour
-		for v in range(vtxCount):
-			tours[i, v] = vtx[v]
-			sortedVertices[i, v] = vertices[tours[i, v]]
-		
-		#include a return to the first vertex of the tour
-		sortedVertices[i, vtxCount] = vertices[0]
-		
-		#get the tour in a format that can be plotted
-		vtxX, vtxY = np.array(sortedVertices[i].tolist()).T
-		
-		tourAxes[i] = plt.subplot(len(tourFiles), 1, i)
-		tourAxes[i].plot(vtxX, vtxY, linestyle='-', color='b', markerfacecolor='red', marker='o')
-		tourAxes[i].set_title(tourFiles[i] + " - Weight: " + weight)
->>>>>>> 7fce754db1b3c64f3c1875713672c4c08e194c38
-
 	plt.show()
 	return
 
@@ -127,10 +97,7 @@ if(len(sys.argv) < 4):
 
 vFile = sys.argv[2]
 tFiles = sys.argv[3:]
-<<<<<<< HEAD
-=======
 
->>>>>>> 7fce754db1b3c64f3c1875713672c4c08e194c38
 if(sys.argv[1] == "MST"):
 	visualizeTree(vFile, tFiles[0])
 else:
