@@ -18,18 +18,23 @@ def visualizeTour(pointsFile, tourFiles):
 		coords = re.findall('-?\d+', coords)
 		vertices[i] = (coords[0], coords[1])
 
-	#create a plot
-	#tourAxes = np.empty(len(tourFiles), dtype=object)
-	tourAxes = np.ndarray(shape=(math.ceil(math.log(len(tourFiles), 2)), math.ceil(math.log(len(tourFiles), 2))), dtype=object)
-	fig, tourAxes = plt.subplots(int(math.ceil(math.log(len(tourFiles), 2))), int(math.ceil(math.log(len(tourFiles), 2))))
+	#create a plot: set plotDim to be a greater number than the number of files in tourFiles
+	plotDimX = int(math.ceil(math.log(len(tourFiles), 2)))
+	plotDimY = plotDimX if plotDimX > 0 else 1
+	
+	while(plotDimX * plotDimY < len(tourFiles)):
+		plotDimX = plotDimX + 1
 
-	tours = np.ndarray(shape=(math.ceil(math.log(len(tourFiles), 2)), math.ceil(math.log(len(tourFiles), 2)), vtxCount), dtype='i')
-	sortedVertices = np.ndarray(shape=(math.ceil(math.log(len(tourFiles), 2)), math.ceil(math.log(len(tourFiles), 2)), vtxCount + 1), dtype ='i,i')
+	tourAxes = np.ndarray(shape=(plotDimY, plotDimX), dtype=object)
+	#fig, tourAxes = plt.subplots(plotDimY, plotDimX)
+	
+	tours = np.ndarray(shape=(plotDimY, plotDimX, vtxCount), dtype='i')
+	sortedVertices = np.ndarray(shape=(plotDimY, plotDimX, vtxCount + 1), dtype ='i,i')
 	
 	#read in tours and create plots
 	k = 0;
-	for i in range(int(math.ceil(math.log(len(tourFiles), 2)))):
-		for j in range(int(math.ceil(math.log(len(tourFiles), 2)))):
+	for i in range(plotDimY):
+		for j in range(plotDimX):
 			if(k < len(tourFiles)):
 				tourFile = open(tourFiles[k])
 				weight = tourFile.readline()
@@ -46,7 +51,7 @@ def visualizeTour(pointsFile, tourFiles):
 				#get the tour in a format that can be plotted
 				vtxX, vtxY = np.array(sortedVertices[i, j].tolist()).T
 				
-				#tourAxes[i][j] = plt.subplot(len(tourFiles), i + 1, j + 1)
+				tourAxes[i][j] = plt.subplot(plotDimY, plotDimX, k)
 				tourAxes[i][j].plot(vtxX, vtxY, linestyle='-', color='b', markerfacecolor='red', marker='o')
 				tourAxes[i][j].set_title(tourFiles[k] + " - Weight: " + weight)
 				k = k + 1
@@ -94,10 +99,6 @@ if(len(sys.argv) < 4):
 
 vFile = sys.argv[2]
 tFiles = sys.argv[3:]
-#fileMat = np.ndarray(math.ceil(math.log(len(tFiles), 2)), math.ceil(math.log(len(tFiles), 2)), dtype='s')
-#k
-#for i in range(int(math.ceil(math.log(len(tourFiles), 2)))):
-#	for j in range(int(math.ceil(math.log(len(tourFiles), 2)))):
 if(sys.argv[1] == "MST"):
 	visualizeTree(vFile, tFiles[0])
 else:
