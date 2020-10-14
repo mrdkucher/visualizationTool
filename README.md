@@ -1,6 +1,6 @@
 # Graph Traversal Visualizer
 
-This is a visualization tool that uses Python(2.7.10) to print out various tours of vertices in a graph.
+This is a visualization tool that uses Python 3 to print out various tours of vertices in a graph.
 
 ![alt text](https://user-images.githubusercontent.com/13631603/50305089-7c902c80-0457-11e9-8a60-ad6f33bcc2d3.png)
 
